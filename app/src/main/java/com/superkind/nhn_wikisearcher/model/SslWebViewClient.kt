@@ -1,18 +1,39 @@
 package com.superkind.nhn_wikisearcher.model
 
+import android.graphics.Bitmap
 import android.net.http.SslError
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
 
-class SslWebViewConnect : WebViewClient() {
+class SslWebViewClient(var mCallBack: WebViewCallBack?) : WebViewClient() {
+    interface WebViewCallBack {
+        fun onReceivedSslError()
+        fun shouldOverrideUrlLoading()
+        fun onPageStarted()
+        fun onPageFinished()
+    }
+
+
     override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
-        handler.proceed() // SSL 에러가 발생해도 계속 진행!
+        handler.proceed() // 계속 진행
+        mCallBack?.onReceivedSslError()
     }
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         view.loadUrl(url)
-        return true //응용프로그램이 직접 url를 처리함
+        mCallBack?.shouldOverrideUrlLoading()
+        return true
+    }
+
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        super.onPageStarted(view, url, favicon)
+        mCallBack?.onPageStarted()
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        super.onPageFinished(view, url)
+        mCallBack?.onPageFinished()
     }
 }

@@ -4,9 +4,8 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.superkind.nhn_wikisearcher.model.SearchModel
+import com.superkind.nhn_wikisearcher.model.WikiSearchModel
 import com.superkind.nhn_wikisearcher.vo.WikiSearchResult
-import com.superkind.restapi.interfaces.HttpCallBack
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,7 +31,7 @@ class ExampleInstrumentedTest {
     @Test
     fun getSummary() {
         val search = "google"
-        SearchModel().requestSummaryData(search, object : SearchModel.WikiSearchListener {
+        WikiSearchModel().requestSummaryData(search, object : WikiSearchModel.WikiSearchListener {
             override fun onSuccess(result: Any) {
                 if (result is WikiSearchResult) {
                     Log.d("superkind-debug", result.toString())
@@ -48,7 +47,7 @@ class ExampleInstrumentedTest {
     @Test
     fun getList() {
         val search = "google"
-        SearchModel().requestListData(search, object : SearchModel.WikiSearchListener {
+        WikiSearchModel().requestListData(search, object : WikiSearchModel.WikiSearchListener {
             override fun onSuccess(result: Any) {
                 val size = (result as ArrayList<*>).size
                 Log.d("superkind-debug", "result length: $size")

@@ -1,6 +1,5 @@
 package com.superkind.nhn_wikisearcher.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -8,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.superkind.nhn_wikisearcher.databinding.ListItemBinding
-import com.superkind.nhn_wikisearcher.view.WikiItemView
+import com.superkind.nhn_wikisearcher.view.WikiListItemView
 import com.superkind.nhn_wikisearcher.vo.WikiSearchResult
 import java.lang.Exception
 
-class SearchListAdapter (val context: Context) : BaseAdapter() {
+class SearchListAdapter (private val context: Context) : BaseAdapter() {
     private var items: ArrayList<WikiSearchResult> = arrayListOf()
 
     override fun getCount(): Int {
@@ -30,29 +28,29 @@ class SearchListAdapter (val context: Context) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val holder: WikiItemHolder
-        lateinit var itemView: WikiItemView
+        lateinit var listItemView: WikiListItemView
 
         // contentView가 null일때(최초로 화면이 실행될 때)
         // ViewHolder에 바인딩된 View들을 연결시킨 후 tag에 Holder를 저장한다
         if (convertView == null) {
-            itemView = WikiItemView(context)
-            itemView.setOnClickListener()
+            listItemView = WikiListItemView(context)
+            listItemView.setOnClickListener()
 
-            holder = WikiItemHolder(itemView.getImgView(), itemView.getTitleView(), itemView.getExtractView())
-            itemView.tag = holder
+            holder = WikiItemHolder(listItemView.getImgView(), listItemView.getTitleView(), listItemView.getExtractView())
+            listItemView.tag = holder
         } else { // 뷰가 recycle 됐을 때, tag에 저장되어 있던 홀더를 꺼낸다.
             holder = convertView.tag as WikiItemHolder
-            itemView = convertView as WikiItemView
+            listItemView = convertView as WikiListItemView
         }
 
         // Holder에 저장되어 있던 데이터를 변경한다.
         with (items[position]) {
-            holder.image.setImageDrawable(img)
+            holder.image.setImageDrawable(imgDrawable)
             holder.title.text = displayTitle
             holder.extract.text = extract
         }
 
-        return itemView
+        return listItemView
     }
 
     /**

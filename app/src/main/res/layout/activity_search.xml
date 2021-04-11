@@ -4,43 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.SearchActivity">
 
-    <ImageButton
-        android:id="@+id/imgBtn_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <EditText
-        android:id="@+id/tx_search"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        android:inputType="text"
-        android:maxLines="1"
-        app:layout_constraintEnd_toStartOf="@+id/imgBtn_search"
-        app:layout_constraintStart_toEndOf="@id/imgBtn_back"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="Search" />
-
-    <ImageButton
-        android:id="@+id/imgBtn_search"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <View style="@style/Divider_horizontal"
-        android:id="@+id/div"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_search" />
+    <com.superkind.nhn_wikisearcher.view.SearchBarView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -48,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/div"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="0dp">
 

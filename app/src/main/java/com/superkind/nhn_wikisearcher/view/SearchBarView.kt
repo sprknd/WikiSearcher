@@ -21,18 +21,22 @@ class SearchBarView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     fun setEditOnKeyListener(listener: View.OnKeyListener) {
-        mBinding.txSearch.setOnKeyListener(listener)
+        mBinding.editSearch.setOnKeyListener(listener)
     }
 
     fun getSearchText(): String {
-        return mBinding.txSearch.text.toString()
+        return mBinding.editSearch.text.toString()
     }
 
     fun setSearchText(text: String) {
-        mBinding.txSearch.setText(text)
+        mBinding.editSearch.setText(text)
     }
 
     fun setSearchTextEnabled(enable: Boolean) {
-        mBinding.txSearch.isEnabled = enable
+        mBinding.editSearch.isEnabled = enable
+    }
+
+    fun setSelection(length: Int) {
+        mBinding.editSearch.setSelection(length)
     }
 }

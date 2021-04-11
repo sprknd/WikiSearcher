@@ -7,13 +7,14 @@ import com.superkind.restapi.HttpAPI
 import com.superkind.restapi.interfaces.HttpCallBack
 import org.json.JSONObject
 
-class SearchModel {
+class WikiSearchModel {
     interface WikiSearchListener {
         fun onSuccess(result: Any)
         fun onFailure(code: Int, msg: String)
     }
 
     private val mHttpApi: HttpAPI = HttpAPI()
+    private var mLastSearchText: String = ""
 
     private lateinit var mHeaderData: WikiSearchResult
     private lateinit var mListData: ArrayList<WikiSearchResult>
@@ -22,6 +23,8 @@ class SearchModel {
      * 요약 정보를 요청합니다.
      */
     fun requestSummaryData(search: String, listener: WikiSearchListener) {
+        setLastSearchText(search)
+
         mHttpApi.get(WikiURL.summary + makeSearchText(search), object : HttpCallBack {
             override fun onFailure(code: Int, msg: String) {
                 listener.onFailure(code, msg)
@@ -37,6 +40,8 @@ class SearchModel {
      * 연관 정보를 요청합니다.
      */
     fun requestListData(search: String, listener: WikiSearchListener) {
+        setLastSearchText(search)
+
         mHttpApi.get(WikiURL.related + makeSearchText(search), object : HttpCallBack {
             override fun onFailure(code: Int, msg: String) {
                 listener.onFailure(code, msg)
@@ -47,6 +52,14 @@ class SearchModel {
             }
 
         })
+    }
+
+    fun getLastSearchText() : String {
+        return mLastSearchText
+    }
+
+    fun setLastSearchText(search: String) {
+        mLastSearchText = search
     }
 
     /**

@@ -13,7 +13,7 @@ import com.superkind.nhn_wikisearcher.activity.SearchActivity
 import com.superkind.nhn_wikisearcher.databinding.ListHeaderBinding
 import com.superkind.nhn_wikisearcher.databinding.ListItemBinding
 
-class WikiItemView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+class WikiListItemView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private val binding = ListItemBinding.inflate(LayoutInflater.from(context), this, true)

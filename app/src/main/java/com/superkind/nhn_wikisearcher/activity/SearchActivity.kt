@@ -2,116 +2,70 @@ package com.superkind.nhn_wikisearcher.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.security.ProviderInstaller
 import com.superkind.nhn_wikisearcher.adapter.SearchListAdapter
-import com.superkind.nhn_wikisearcher.databinding.ActivityMainBinding
+import com.superkind.nhn_wikisearcher.databinding.ActivitySearchBinding
 import com.superkind.nhn_wikisearcher.presenter.WikiSearchPresenter
 import com.superkind.nhn_wikisearcher.presenter.WikiSearchPresenterImpl
 import com.superkind.nhn_wikisearcher.view.WikiHeaderView
 import com.superkind.nhn_wikisearcher.vo.WikiSearchResult
 
 class SearchActivity : AppCompatActivity(), WikiSearchPresenter.View {
-    var presenter: WikiSearchPresenter.Presenter = WikiSearchPresenterImpl(this, this)
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var listAdapter: SearchListAdapter
-    private lateinit var headerView: WikiHeaderView
-    private var loadingDialog: AlertDialog? = null
-    private var msgDialog: AlertDialog? = null
+    private var mPresenter: WikiSearchPresenter.Presenter = WikiSearchPresenterImpl(this, this)
+    private lateinit var mBinding: ActivitySearchBinding
+    private lateinit var mListAdapter: SearchListAdapter
+    private lateinit var mHeaderView: WikiHeaderView
+    private var mLoadingDialog: AlertDialog? = null
+    private var mMsgDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // android versions < 4.4 bug fix
-        ProviderInstaller.installIfNeeded(applicationContext)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        mBinding = ActivitySearchBinding.inflate(layoutInflater)
 
         initView()
+        mPresenter.onCreate()
 
-        /**
-         * get Intent data
-         */
-        val search = intent.getStringExtra("search")
-        presenter.getListData(search?: "") // Intent로 들어온 값으로 검색을 시도합니다
-        binding.txSearch.setText(search?: "") // Intent로 들어온 값을 EditText에 지정합니다
-        binding.txSearch.setSelection(search?.length?: 0)
+        setContentView(mBinding.root)
+    }
 
-        setContentView(binding.root)
+    override fun onResume() {
+        super.onResume()
+        mPresenter.onResume()
     }
 
     private fun initView() {
-        initHeader()
-        initAdapter()
-
-        // 당겨서 새로고침 합니다.
-        binding.swipeLayout.setOnRefreshListener {
-            requestSearch()
-            binding.swipeLayout.isRefreshing = false
+        mBinding.swipeLayout.setOnRefreshListener {
+            mPresenter.onSwipeRefresh()
         }
 
-        binding.imgBtnSearch.setOnClickListener {
-            requestSearch()
+        mBinding.searchBar.setSearchOnClickListener {
+            mPresenter.onClickSearch()
         }
 
-        binding.imgBtnBack.setOnClickListener {
-            onBackPressed()
+        mBinding.searchBar.setBackOnClickListener {
+            mPresenter.onClickBack()
         }
 
-        binding.txSearch.setOnKeyListener(object: View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                if (event?.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    presenter.getListData(getSearchText())
-                    return true
-                }
-                return false
-            }
-
-        })
-    }
-
-
-    /**
-     * List Adapter를 초기화 합니다.
-     */
-    private fun initAdapter() {
-        listAdapter = SearchListAdapter(this)
-        binding.listSearchResult.adapter = listAdapter
-    }
-
-    private fun initHeader() {
-        headerView = WikiHeaderView(this)
-        headerView.visibility = View.GONE
-        binding.listSearchResult.addHeaderView(headerView)
+        mBinding.searchBar.setEditOnKeyListener { _, keyCode, event -> mPresenter.onKeySearch(keyCode, event) }
     }
 
     /**
      * EditText의 Text를 가져옵니다.
      */
-    private fun getSearchText(): String {
-        return binding.txSearch.text.toString()
-    }
-
-    /**
-     * Presenter에게 EditText에 입력되어 있는 문구로 검색 데이터를 요청합니다.
-     */
-    private fun requestSearch() {
-        val search = getSearchText()
-        if (search.isNotEmpty()) {
-            presenter.getListData(search)
-        }
+    override fun getSearchText(): String {
+        return mBinding.searchBar.getSearchText()
     }
 
     private fun dismissDialogs() {
-        if (loadingDialog != null) {
-            loadingDialog!!.dismiss()
+        if (mLoadingDialog != null) {
+            mLoadingDialog!!.dismiss()
         }
 
-        if (msgDialog != null) {
-            msgDialog!!.dismiss()
+        if (mMsgDialog != null) {
+            mMsgDialog!!.dismiss()
         }
     }
 
@@ -119,8 +73,8 @@ class SearchActivity : AppCompatActivity(), WikiSearchPresenter.View {
      * 현재 리스트를 초기화 합니다.
      */
     override fun clearList() {
-        headerView.visibility = View.GONE
-        listAdapter.clearList()
+        mHeaderView.visibility = View.GONE
+        mListAdapter.clearList()
     }
 
     /**
@@ -129,37 +83,49 @@ class SearchActivity : AppCompatActivity(), WikiSearchPresenter.View {
     override fun showLoading(show: Boolean) {
         dismissDialogs()
 
-        if (loadingDialog == null) {
-            loadingDialog = AlertDialog.Builder(this)
+        if (mLoadingDialog == null) {
+            mLoadingDialog = AlertDialog.Builder(this)
                 .setMessage("Please wait a second..")
+                .setCancelable(false)
                 .create()
         }
 
-        if (show) loadingDialog!!.show()
-        else loadingDialog!!.dismiss()
+        if (show) mLoadingDialog!!.show()
+        else mLoadingDialog!!.dismiss()
     }
 
-    override fun showLoading(show: Boolean, msg: String) {
+    override fun showMsgDialog(show: Boolean, msg: String) {
         dismissDialogs()
 
-        if (msgDialog == null) {
-            msgDialog = AlertDialog.Builder(this)
+        if (mMsgDialog == null) {
+            mMsgDialog = AlertDialog.Builder(this)
                 .setTitle("Error")
                 .setMessage(msg)
-                .setPositiveButton("OK") { _, _ -> msgDialog!!.dismiss() }
+                .setPositiveButton("OK") { _, _ -> mMsgDialog!!.dismiss() }
                 .show()
         }
 
-        if (show) msgDialog!!.show()
-        else msgDialog!!.dismiss()
+        if (show) mMsgDialog!!.show()
+        else mMsgDialog!!.dismiss()
+    }
+
+    override fun getIntentData(): String {
+        val search = intent.getStringExtra("search")
+        return search?: ""
+    }
+
+    override fun initListHeader() {
+        mHeaderView = WikiHeaderView(this)
+        mHeaderView.visibility = View.GONE
+        mBinding.listSearchResult.addHeaderView(mHeaderView)
     }
 
     /**
      * 헤더 레이아웃을 추가합니다. 이미 있다면 제거하고 추가합니다.
      */
-    override fun updateHeader(result: WikiSearchResult) {
-        with(headerView) {
-            result.img?.let { setImg(it) }
+    override fun updateListHeader(result: WikiSearchResult) {
+        with(mHeaderView) {
+            result.imgDrawable?.let { setImg(it) }
             setImgSize(result.imgWidth, result.imgHeight)
             setTitle(result.displayTitle)
             setExtract(result.extract)
@@ -172,23 +138,49 @@ class SearchActivity : AppCompatActivity(), WikiSearchPresenter.View {
     }
 
     /**
+     * List Adapter를 초기화 합니다.
+     */
+    override fun initListAdapter() {
+        mListAdapter = SearchListAdapter(this)
+        mBinding.listSearchResult.adapter = mListAdapter
+    }
+
+    /**
      * 연관 리스트에 데이터를 추가합니다.
      */
-    override fun addItem(item: WikiSearchResult, position: Int) {
-        listAdapter.addData(item)
+    override fun addListItem(item: WikiSearchResult, position: Int) {
+        mListAdapter.addData(item)
     }
 
     /**
      * 연관 리스트에 데이터를 업데이트 합니다.
      */
-    override fun updateList(list: ArrayList<WikiSearchResult>) {
-        listAdapter.setDataList(list)
+    override fun setList(list: ArrayList<WikiSearchResult>) {
+        mListAdapter.setDataList(list)
     }
 
     /**
      * 연관 리스트에 데이터를 삭제합니다.
      */
-    override fun removeItem(item: WikiSearchResult, position: Int) {
-        listAdapter.removeItem(item, position)
+    override fun removeListItem(item: WikiSearchResult, position: Int) {
+        mListAdapter.removeItem(item, position)
+    }
+
+    override fun goBack() {
+        onBackPressed()
+    }
+
+    override fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+    override fun setSearchText(search: String) {
+        mBinding.searchBar.setSearchText(search)
+        mBinding.searchBar.setSelection(search.length) // 커서를 마지막으로 이동
+    }
+
+    override fun setSwipeRefresh(refresh: Boolean) {
+        mBinding.swipeLayout.isRefreshing = refresh
     }
 }
