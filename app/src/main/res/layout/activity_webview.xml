@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.superkind.nhn_wikisearcher.view.SearchBarView
+    <com.superkind.nhnsoft_wikiviewer.view.SearchBarView
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

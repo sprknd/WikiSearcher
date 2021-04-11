@@ -3,24 +3,63 @@ plugins {
     id 'kotlin-android'
 }
 
+def buildDate = getBuildDate()
+
+def getBuildDate() {
+    def date = new Date()
+    def format = date.format('yyyyMMdd')
+
+    println('NnhnSoft_WikiSearcher build date: ' + format)
+    return format
+}
+
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/with4/Nest/code/NhnSoft_WikiViewer/nhnsoft_wikiviewer_KeyStore')
+            storePassword 'nhnsoft'
+            keyAlias 'superkind'
+            keyPassword 'plokijuh'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.superkind.nhn_wikisearcher"
+        applicationId "com.superkind.nhnsoft_wikiviewer"
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode buildDate.toInteger()
+        versionName "0.92"
+
+        manifestPlaceholders = [
+                appLabel: "WikiViewer"
+        ]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+        }
+        release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        android.applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                String version = variant.versionName
+
+                if (variant.buildType.name == 'release') {
+                    output.outputFileName = "WikiViewer_" + "${version}.apk"
+                } else if (variant.buildType.name == 'debug') {
+                    output.outputFileName = "WikiViewer" + "${variant.buildType.name}" +
+                            "_${version} ${getBuildDate()}.apk"
+                }
+            }
         }
     }
     compileOptions {

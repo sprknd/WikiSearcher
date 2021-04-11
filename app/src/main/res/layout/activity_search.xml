@@ -6,30 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".activity.SearchActivity">
 
-    <com.superkind.nhn_wikisearcher.view.SearchBarView
+    <com.superkind.nhnsoft_wikiviewer.view.SearchBarView
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
+    <com.superkind.nhnsoft_wikiviewer.view.WikiListView
+        android:id="@+id/list_wiki"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp">
-
-        <ListView
-            android:id="@+id/list_search_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="5dp">
-        </ListView>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_constraintTop_toBottomOf="@id/search_bar"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
