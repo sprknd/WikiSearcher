@@ -5,9 +5,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ListView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.superkind.nhnsoft_wikiviewer.adapter.SearchListAdapter
+import com.superkind.nhnsoft_wikiviewer.adapter.WikiListAdapter
 import com.superkind.nhnsoft_wikiviewer.databinding.ListWikiBinding
 import com.superkind.nhnsoft_wikiviewer.vo.WikiSearchResult
 
@@ -16,7 +17,7 @@ class WikiListView @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     private val mBinding = ListWikiBinding.inflate(LayoutInflater.from(context), this, true)
     private lateinit var mHeaderView: WikiHeaderView
-    private lateinit var mListAdapter: SearchListAdapter
+    private lateinit var mListAdapter: WikiListAdapter
 
 
     fun initListHeader() {
@@ -43,8 +44,16 @@ class WikiListView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     fun initListAdapter() {
-        mListAdapter = SearchListAdapter(context)
+        mListAdapter = WikiListAdapter(context)
         mBinding.listSearchResult.adapter = mListAdapter
+    }
+
+    fun getListAdapter(): WikiListAdapter {
+        return mListAdapter
+    }
+
+    fun getListView(): ListView {
+        return mBinding.listSearchResult
     }
 
     fun addListItem(item: WikiSearchResult, position: Int) {

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.KeyEvent
 import com.google.android.gms.security.ProviderInstaller
 import com.superkind.nhnsoft_wikiviewer.model.WikiSearchModel
+import com.superkind.nhnsoft_wikiviewer.util.EspressoIdleResource
 import com.superkind.nhnsoft_wikiviewer.util.Util
 import com.superkind.nhnsoft_wikiviewer.vo.WikiSearchResult
 
@@ -87,6 +88,7 @@ class WikiSearchPresenterImpl(context: Context, view: WikiSearchPresenter.View) 
         if (search.isEmpty()) {
             return
         }
+        EspressoIdleResource.increment() // Espresso Wait
 
         initList()
 
@@ -103,6 +105,7 @@ class WikiSearchPresenterImpl(context: Context, view: WikiSearchPresenter.View) 
                             imgDrawable = Util.getImgDrawable(imgSrc, displayTitle)
                         }
 
+                        // 헤더를 업데이트 합니다.
                         doOnUiThread {
                             mView.updateListHeader(result)
                             mView.hideKeyboard()
@@ -134,7 +137,7 @@ class WikiSearchPresenterImpl(context: Context, view: WikiSearchPresenter.View) 
                                 imgDrawable = Util.getImgDrawable(imgSrc, displayTitle)
                             }
 
-                            // 리스트에 추가합니다.
+                            // 각 result를 리스트에 추가합니다.
                             doOnUiThread {
                                 mView.addListItem(result[i] as WikiSearchResult, i)
 
@@ -144,6 +147,7 @@ class WikiSearchPresenterImpl(context: Context, view: WikiSearchPresenter.View) 
                             }
                         }
                         doOnUiThread {
+                            mView.addListItemDone()
                             mView.showLoading(false)
                         }
                     }

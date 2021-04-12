@@ -13,6 +13,7 @@ interface WikiSearchPresenter {
         fun addListItem(item: WikiSearchResult, position: Int)
         fun setList(list: ArrayList<WikiSearchResult>)
         fun removeListItem(item: WikiSearchResult, position: Int)
+        fun addListItemDone()
 
         // Action
         fun goBack()

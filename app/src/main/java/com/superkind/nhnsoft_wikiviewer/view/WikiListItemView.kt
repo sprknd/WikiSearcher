@@ -30,6 +30,10 @@ class WikiListItemView @JvmOverloads constructor(context: Context, attrs: Attrib
         binding.txDisplayTitle.text = title
     }
 
+    fun getTitle() : String {
+        return binding.txDisplayTitle.text.toString()
+    }
+
     fun setExtract(extract: String) {
         binding.txExtract.text = extract
     }

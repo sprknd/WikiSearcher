@@ -103,6 +103,10 @@ class WebViewActivity : AppCompatActivity(), WebViewPresenter.View {
      * 로딩창을 생성/표출합니다.
      */
     override fun showLoading(show: Boolean) {
+        if (isFinishing) {
+            return
+        }
+
         dismissDialogs()
 
         if (mLoadingDialog == null) {
@@ -120,6 +124,10 @@ class WebViewActivity : AppCompatActivity(), WebViewPresenter.View {
      * 메시지 다이얼로그를 생성/표출합니다.
      */
     override fun showMsgDialog(show: Boolean, msg: String) {
+        if (isFinishing) {
+            return
+        }
+
         dismissDialogs()
 
         if (mMsgDialog == null) {
@@ -150,6 +158,10 @@ class WebViewActivity : AppCompatActivity(), WebViewPresenter.View {
      * 현재 액티비티의 모든 dialog를 dismiss합니다.
      */
     private fun dismissDialogs() {
+        if (isFinishing) {
+            return
+        }
+
         if (mLoadingDialog != null) {
             mLoadingDialog!!.dismiss()
         }

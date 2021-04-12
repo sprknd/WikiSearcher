@@ -11,7 +11,7 @@ import com.superkind.nhnsoft_wikiviewer.view.WikiListItemView
 import com.superkind.nhnsoft_wikiviewer.vo.WikiSearchResult
 import java.lang.Exception
 
-class SearchListAdapter (private val context: Context) : BaseAdapter() {
+class WikiListAdapter (private val context: Context) : BaseAdapter() {
     private var items: ArrayList<WikiSearchResult> = arrayListOf()
 
     override fun getCount(): Int {

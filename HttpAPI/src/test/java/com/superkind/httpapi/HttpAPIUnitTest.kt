@@ -1,6 +1,7 @@
 package com.superkind.httpapi
 
 import com.superkind.httpapi.interfaces.HttpCallBack
+import org.junit.Before
 import org.junit.Test
 import java.nio.charset.Charset
 
@@ -10,16 +11,19 @@ import java.nio.charset.Charset
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class HttpAPIUnitTest {
+    private lateinit var api: HttpAPI
+    @Before
+    fun init() {
+        api = HttpAPI()
+    }
+
+
     /**
      * http 방식이든 https 방식이든, 모두 호출될 수 있도록 작성한다.
      */
     @Test
     fun httpUrl() {
-        var url =  "http://example.org/"
-        val api = HttpAPI()
-        api.get(url, callback())
-
-        url =  "https://example.org/"
+        val url =  "http://example.org/"
         api.get(url, callback())
     }
 
@@ -29,35 +33,30 @@ class HttpAPIUnitTest {
     @Test
     fun httpsUrl() {
         val url =  "https://example.org/"
-        val api = HttpAPI()
         api.get(url, callback())
     }
 
     @Test
     fun validUrl() {
         val url =  "https://en.wikipedia.org/api/rest_v1/page/summary/google"
-        val api = HttpAPI()
         api.get(url, callback())
     }
 
     @Test
     fun invalidUrl() {
         val url =  "https://en.wikipedia.org/api/rest_v10/page/summary/google"
-        val api = HttpAPI()
         api.get(url, callback())
     }
 
     @Test
     fun notSupportUrl() {
         val url =  "ftp://en.wikipedia.org/api/rest_v10/page/summary/google"
-        val api = HttpAPI()
         api.get(url, callback())
     }
 
     @Test
     fun notFound() {
         val url =  "https://en.wikipedia.org/api/rest_v10/page/summary2/google"
-        val api = HttpAPI()
         api.get(url, callback())
     }
 
@@ -67,7 +66,6 @@ class HttpAPIUnitTest {
     @Test
     fun testPost() {
         val url = "https://webhook.site/d7c787b0-58a2-4858-8934-a82a7e220b24"
-        val api = HttpAPI()
         api.post(url, "superkind".toByteArray(Charset.defaultCharset()), callback())
     }
 
@@ -77,7 +75,6 @@ class HttpAPIUnitTest {
     @Test
     fun testPut() {
         val url = "https://webhook.site/d7c787b0-58a2-4858-8934-a82a7e220b24"
-        val api = HttpAPI()
         api.put(url, "superkind".toByteArray(Charset.defaultCharset()), callback())
     }
 
@@ -87,7 +84,6 @@ class HttpAPIUnitTest {
     @Test
     fun testDelete() {
         val url = "https://webhook.site/d7c787b0-58a2-4858-8934-a82a7e220b24"
-        val api = HttpAPI()
         api.delete(url, callback())
     }
 
@@ -97,7 +93,6 @@ class HttpAPIUnitTest {
     @Test
     fun setHeader() {
         val url = "https://webhook.site/d7c787b0-58a2-4858-8934-a82a7e220b24"
-        val api = HttpAPI()
         api.setRequestHeader("Content-Type", "text/html; charset=utf-8")
         api.setRequestHeader("Content-Language", "ko")
         api.put(url, "superkind".toByteArray(Charset.defaultCharset()), callback())
@@ -109,7 +104,6 @@ class HttpAPIUnitTest {
     @Test
     fun getData() {
         val url =  "https://en.wikipedia.org/api/rest_v1/page/related/google"
-        val api = HttpAPI()
         api.get(url, object : HttpCallBack {
             override fun onSuccess(response: ByteArray) {
                 println(String(response))
@@ -127,7 +121,6 @@ class HttpAPIUnitTest {
     @Test
     fun sendData() {
         val url = "https://webhook.site/d7c787b0-58a2-4858-8934-a82a7e220b24"
-        val api = HttpAPI();
         // String -> ByteArray
         api.post(url, "NHN SOFT".toByteArray(Charset.defaultCharset()), callback())
 
@@ -141,7 +134,6 @@ class HttpAPIUnitTest {
     @Test
     fun setTimeout() {
         val url =  "https://en.wikipedia.org/api/rest_v1/page/summary/google"
-        val api = HttpAPI()
         api.setTimeout(10000) // 타임아웃 10초로 설정
         api.get(url, callback())
     }
