@@ -33,7 +33,8 @@ android {
         versionName "1.0.0"
 
         manifestPlaceholders = [
-                appLabel: "WikiViewer"
+                appLabel: "WikiViewer",
+                appIcon: "@mipmap/ic_wikipedia"
         ]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

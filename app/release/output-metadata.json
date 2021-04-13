@@ -10,9 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 20210411,
-      "versionName": "0.91",
-      "outputFile": "WikiViewer_0.91.apk"
+      "versionCode": 20210413,
+      "versionName": "1.0.0",
+      "outputFile": "WikiViewer_1.0.0.apk"
     }
   ]
 }

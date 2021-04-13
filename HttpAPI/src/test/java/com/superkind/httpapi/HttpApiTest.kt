@@ -5,12 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import java.nio.charset.Charset
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class HttpAPIUnitTest {
+class HttpApiTest {
     private lateinit var api: HttpAPI
     @Before
     fun init() {
