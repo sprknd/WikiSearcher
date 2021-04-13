@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.superkind.nhnsoft_wikiviewer.activity.SearchActivity
+import com.superkind.nhnsoft_wikiviewer.activity.WikiSearchActivity
 import com.superkind.nhnsoft_wikiviewer.databinding.ListItemBinding
 
 class WikiListItemView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -52,7 +52,7 @@ class WikiListItemView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun setOnClickListener() {
         binding.listItem.setOnClickListener {
-            val intent = Intent(context.applicationContext, SearchActivity::class.java)
+            val intent = Intent(context.applicationContext, WikiSearchActivity::class.java)
             intent.putExtra("search", binding.txDisplayTitle.text)
             context.startActivity(intent)
         }

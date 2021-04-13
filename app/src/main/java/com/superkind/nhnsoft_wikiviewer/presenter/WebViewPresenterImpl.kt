@@ -3,7 +3,7 @@ package com.superkind.nhnsoft_wikiviewer.presenter
 import android.content.Context
 import android.content.Intent
 import android.view.KeyEvent
-import com.superkind.nhnsoft_wikiviewer.activity.SearchActivity
+import com.superkind.nhnsoft_wikiviewer.activity.WikiSearchActivity
 import com.superkind.nhnsoft_wikiviewer.model.SslWebViewClient
 import com.superkind.nhnsoft_wikiviewer.util.Util
 
@@ -28,7 +28,7 @@ class WebViewPresenterImpl(var mContext: Context, var mView: WebViewPresenter.Vi
     }
 
     override fun onClickSearch() {
-        val intent = Intent(mContext.applicationContext, SearchActivity::class.java)
+        val intent = Intent(mContext.applicationContext, WikiSearchActivity::class.java)
         intent.putExtra("search", mView.getSearchText())
         mContext.startActivity(intent)
     }

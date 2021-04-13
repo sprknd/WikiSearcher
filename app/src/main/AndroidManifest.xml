@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NhnSoft_WikiViewer">
 
-        <activity android:name="com.superkind.nhnsoft_wikiviewer.activity.SearchActivity">
+        <activity android:name="com.superkind.nhnsoft_wikiviewer.activity.WikiSearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

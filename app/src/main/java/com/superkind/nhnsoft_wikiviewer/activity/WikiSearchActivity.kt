@@ -10,7 +10,7 @@ import com.superkind.nhnsoft_wikiviewer.presenter.WikiSearchPresenterImpl
 import com.superkind.nhnsoft_wikiviewer.util.EspressoIdleResource
 import com.superkind.nhnsoft_wikiviewer.vo.WikiSearchResult
 
-class SearchActivity : AppCompatActivity(), WikiSearchPresenter.View {
+class WikiSearchActivity : AppCompatActivity(), WikiSearchPresenter.View {
     var mPresenter: WikiSearchPresenter.Presenter = WikiSearchPresenterImpl(this, this)
     private lateinit var mBinding: ActivitySearchBinding
 

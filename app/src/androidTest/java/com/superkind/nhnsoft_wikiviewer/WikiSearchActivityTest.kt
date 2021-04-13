@@ -1,24 +1,20 @@
 package com.superkind.nhnsoft_wikiviewer
 
 import android.view.View
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeDown
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
-import com.superkind.nhnsoft_wikiviewer.activity.SearchActivity
+import com.superkind.nhnsoft_wikiviewer.activity.WikiSearchActivity
 import com.superkind.nhnsoft_wikiviewer.activity.WebViewActivity
 import com.superkind.nhnsoft_wikiviewer.util.EspressoIdleResource
 import com.superkind.nhnsoft_wikiviewer.view.SearchBarView
@@ -33,12 +29,12 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class SearchActivityTest {
-    lateinit var activityScenario: ActivityScenario<SearchActivity>
+class WikiSearchActivityTest {
+    lateinit var activityScenarioWiki: ActivityScenario<WikiSearchActivity>
     private val searchText = "microsoft"
 
     private fun startActivity() {
-        activityScenario = ActivityScenario.launch(SearchActivity::class.java)
+        activityScenarioWiki = ActivityScenario.launch(WikiSearchActivity::class.java)
     }
 
     @Before
@@ -80,10 +76,12 @@ class SearchActivityTest {
         }
     }
 
-    // 리스트에 아이템이 추가되었는지 확인합니다.
+    /**
+     * 리스트에 아이템이 추가되었는지 확인합니다.
+     */
     private fun checkIsListItemLoaded(): Boolean {
         var loaded = false
-        activityScenario.onActivity {
+        activityScenarioWiki.onActivity {
             val size = it.findViewById<WikiListView>(R.id.main_list_wiki).getListAdapter().count
             loaded = size > 0
         }
@@ -145,7 +143,7 @@ class SearchActivityTest {
         clickListItem(1)
 
         // check is SearchActivity successfully load
-        intended(hasComponent(SearchActivity::class.java.name))
+        intended(hasComponent(WikiSearchActivity::class.java.name))
         Intents.release()
     }
 
@@ -156,7 +154,7 @@ class SearchActivityTest {
     fun checkHeaderTitle() {
         searchAndShowList()
 
-        activityScenario.onActivity {
+        activityScenarioWiki.onActivity {
             val title = it.findViewById<WikiListView>(R.id.main_list_wiki).getListHeader().getTitle()
             Assert.assertTrue(title.toUpperCase().contains(title.toUpperCase()))
         }
@@ -169,7 +167,7 @@ class SearchActivityTest {
 
     @After
     fun close() {
-        activityScenario.close()
+        activityScenarioWiki.close()
     }
 }
 

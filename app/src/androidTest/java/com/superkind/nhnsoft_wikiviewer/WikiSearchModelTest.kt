@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 
-class SearchModelTest {
+class WikiSearchModelTest {
     @Test
     fun requestListData() {
         val appContext = InstrumentationRegistry.getInstrumentation().context
