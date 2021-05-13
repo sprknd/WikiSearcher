@@ -1,2 +1,2 @@
 # WikiSearcher
-A Android Application Sample to explore Wikipedia.
+Android Application Sample to explore Wikipedia.
